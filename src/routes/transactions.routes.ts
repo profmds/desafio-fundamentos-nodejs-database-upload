@@ -1,14 +1,14 @@
 import { Router } from 'express';
 
-// import TransactionsRepository from '../repositories/TransactionsRepository';
-// import CreateTransactionService from '../services/CreateTransactionService';
-// import DeleteTransactionService from '../services/DeleteTransactionService';
-// import ImportTransactionsService from '../services/ImportTransactionsService';
+import TransactionsRepository from '../repositories/TransactionsRepository';
+import CreateTransactionService from '../services/CreateTransactionService';
+import DeleteTransactionService from '../services/DeleteTransactionService';
+import ImportTransactionsService from '../services/ImportTransactionsService';
 
 const transactionsRouter = Router();
 
 transactionsRouter.get('/', async (request, response) => {
-  try {
+  /* try {
     const transactions = transactionsRepository.all();
     const balance = transactionsRepository.getBalance();
     const printTransaction = {
@@ -19,7 +19,7 @@ transactionsRouter.get('/', async (request, response) => {
     return response.json(printTransaction);
   } catch (err) {
     return response.status(400).json({ error: err.message });
-  }
+  } */
 });
 
 transactionsRouter.post('/', async (request, response) => {
@@ -27,17 +27,16 @@ transactionsRouter.post('/', async (request, response) => {
 
   // criando o objeto de criação da transaçãod com o conceito de Dependency Invertion
   // para que sempre a lista de transações abertas e não novas criadas
-  const createTransaction = new CreateTransactionService(
-    transactionsRepository,
-  );
+  const createTransaction = new CreateTransactionService();
 
   // chamada da execução do servço para que os dados da transação sejam deveras adicionado
   // no array de transações, para que o principío de cada arquivo realizar apenas seu papel
   // manipulações de dados serão enviadas aos serviços, porém adicionadas através do repositório
-  const transaction = createTransaction.execute({
+  const transaction = await createTransaction.execute({
     title,
     value,
     type,
+    category,
   });
 
   return response.json(transaction);
