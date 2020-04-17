@@ -14,10 +14,7 @@ class TransactionsRepository extends Repository<Transaction> {
     const transactions = await this.find();
 
     const income = transactions.reduce((result, transaction) => {
-      console.log('Valor', typeof transaction.value);
-      console.log(typeof result);
       if (transaction.type === 'income') return result + transaction.value;
-      // console.log(result);
       return result;
     }, 0);
     const outcome = transactions.reduce((result, transaction) => {

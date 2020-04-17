@@ -12,7 +12,7 @@ transactionsRouter.get('/', async (request, response) => {
   const transactionsRepository = getCustomRepository(TransactionsRepository);
 
   const transactions = await transactionsRepository.find();
-  const balance = transactionsRepository.getBalance();
+  const balance = await transactionsRepository.getBalance();
 
   const printTransaction = {
     transactions,

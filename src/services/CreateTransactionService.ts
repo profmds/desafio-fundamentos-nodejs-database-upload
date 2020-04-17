@@ -1,5 +1,5 @@
 import { getCustomRepository, getRepository } from 'typeorm';
-// import AppError from '../errors/AppError';
+import AppError from '../errors/AppError';
 
 import Transaction from '../models/Transaction';
 import Category from '../models/Category';
@@ -24,6 +24,14 @@ class CreateTransactionService {
     // Isso garante que não sejam inicializados repositórios diferentes para que possamos sempre acessar os mesmos dados
     const transactionsRepository = getCustomRepository(TransactionsRepository);
     const categoriesRepository = getRepository(Category);
+
+    const balance = transactionsRepository.getBalance();
+
+    // antes de tentar criar uma nova transação de retirada é preciso verificar e existe saldo
+
+    if (type === 'outcome' && value >= (await balance).total) {
+      throw new AppError('Invalid value, you cannot have a negative balance');
+    }
 
     // verificar se a categoria já existe
     // como neste caso não temos um atributo com o mesmo nome que o parâmetro da tabela no banco
