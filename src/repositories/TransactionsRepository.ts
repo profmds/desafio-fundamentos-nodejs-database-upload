@@ -10,14 +10,17 @@ interface Balance {
 
 @EntityRepository(Transaction)
 class TransactionsRepository extends Repository<Transaction> {
-  // trocar void por Balance
-  public async getBalance(): Promise<void> {
-    /* const income = this.transactions.reduce((result, transaction) => {
-      if (transaction.type === 'income') return result + transaction.value;
+  public async getBalance(): Promise<Balance> {
+    const transactions = await this.find();
 
+    const income = transactions.reduce((result, transaction) => {
+      console.log('Valor', typeof transaction.value);
+      console.log(typeof result);
+      if (transaction.type === 'income') return result + transaction.value;
+      // console.log(result);
       return result;
     }, 0);
-    const outcome = this.transactions.reduce((result, transaction) => {
+    const outcome = transactions.reduce((result, transaction) => {
       if (transaction.type === 'outcome') return result + transaction.value;
 
       return result;
@@ -31,7 +34,7 @@ class TransactionsRepository extends Repository<Transaction> {
       total,
     };
 
-    return balance; */
+    return balance;
   }
 }
 
